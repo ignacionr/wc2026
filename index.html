@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFA World Cup 2026 Interactive Hub</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="container">
+        <!-- Top Header & Banner -->
+        <header class="main-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-trophy trophy-icon"></i>
+                <div>
+                    <h1>FIFA WORLD CUP 2026</h1>
+                    <p class="subtitle">United 2026 - Canada, Mexico & USA</p>
+                </div>
+            </div>
+
+            <!-- Global Search Bar -->
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="global-search" placeholder="Search teams, players, stadiums, scorers...">
+                    <button class="clear-search-btn" id="clear-search" style="display: none;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <!-- Interactive Search Dropdown -->
+                <div class="search-results-panel" id="search-results" style="display: none;">
+                    <div class="results-header">Search Results</div>
+                    <div class="results-list" id="search-results-list">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Metric Bar (Calculated by WASM) -->
+        <section class="stats-bar" id="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon-wrapper"><i class="fa-solid fa-futbol"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Goals</span>
+                    <span class="stat-value" id="stat-total-goals">--</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Matches Played</span>
+                    <span class="stat-value" id="stat-played-matches">--</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Goals per Match</span>
+                    <span class="stat-value" id="stat-goals-per-match">--</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper"><i class="fa-solid fa-fire"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Top Scoring Team</span>
+                    <span class="stat-value" id="stat-top-team">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="navigation-tabs">
+            <button class="tab-btn active" data-tab="match-center">
+                <i class="fa-solid fa-circle-play"></i> Match Center
+            </button>
+            <button class="tab-btn" data-tab="standings">
+                <i class="fa-solid fa-list-ol"></i> Standings
+            </button>
+            <button class="tab-btn" data-tab="team-tracker">
+                <i class="fa-solid fa-users"></i> Team Tracker
+            </button>
+            <button class="tab-btn" data-tab="stadiums">
+                <i class="fa-solid fa-map-location-dot"></i> Stadiums
+            </button>
+        </nav>
+
+        <!-- Main Display Content Area -->
+        <main class="content-area">
+            <!-- Loading Indicator -->
+            <div class="loading-overlay" id="loading-overlay">
+                <div class="spinner"></div>
+                <p>Initializing WebAssembly Engine & Loading World Cup Data...</p>
+            </div>
+
+            <!-- TAB 1: MATCH CENTER -->
+            <section class="tab-content active" id="tab-match-center">
+                <div class="filter-bar">
+                    <span class="filter-title">Filter Matches:</span>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-status="all">All Matches</button>
+                        <button class="filter-btn" data-status="LIVE">Live <span class="pulse-dot"></span></button>
+                        <button class="filter-btn" data-status="COMPLETED">Completed</button>
+                        <button class="filter-btn" data-status="UPCOMING">Upcoming</button>
+                    </div>
+                </div>
+                <div class="match-grid" id="match-grid-container">
+                    <!-- Dynamic Match Cards -->
+                </div>
+            </section>
+
+            <!-- TAB 2: STANDINGS -->
+            <section class="tab-content" id="tab-standings">
+                <div class="standings-grid" id="standings-grid-container">
+                    <!-- Standings Group Tables -->
+                </div>
+            </section>
+
+            <!-- TAB 3: TEAM TRACKER -->
+            <section class="tab-content" id="tab-team-tracker">
+                <div class="tracker-layout">
+                    <!-- Left Column: Team selector & overview -->
+                    <div class="tracker-sidebar">
+                        <h3>Select National Team</h3>
+                        <div class="team-selector-list" id="tracker-team-list">
+                            <!-- Clickable teams list -->
+                        </div>
+                    </div>
+                    <!-- Right Column: Interactive Details -->
+                    <div class="tracker-main">
+                        <div class="tracker-no-selection" id="tracker-no-selection-msg">
+                            <i class="fa-solid fa-shield-halved selector-shield-icon"></i>
+                            <p>Select a national team from the sidebar to view squad info, custom Q&A, schedules, and tactical lineups</p>
+                        </div>
+                        <div class="tracker-details" id="tracker-details-container" style="display: none;">
+                            <div class="tracker-header">
+                                <h2 id="tracker-team-title">--</h2>
+                                <span class="badge" id="tracker-team-group">Group --</span>
+                            </div>
+
+                            <nav class="tracker-sub-tabs">
+                                <button class="sub-tab-btn active" data-subtab="tracker-squad">Squad Players</button>
+                                <button class="sub-tab-btn" data-subtab="tracker-tactics">Lineup Pitch</button>
+                                <button class="sub-tab-btn" data-subtab="tracker-schedule">Schedule & Matches</button>
+                                <button class="sub-tab-btn" data-subtab="tracker-qa">AI Analyst Q&A</button>
+                            </nav>
+
+                            <div class="tracker-sub-content">
+                                <!-- Squad List -->
+                                <div class="sub-tab-pane active" id="tracker-squad">
+                                    <div class="player-cards-grid" id="tracker-player-grid">
+                                        <!-- Player Cards -->
+                                    </div>
+                                </div>
+
+                                <!-- Lineup Pitch (Tactical Visualizer) -->
+                                <div class="sub-tab-pane" id="tracker-tactics">
+                                    <div class="pitch-container">
+                                        <div class="pitch-label">Tactical Lineup Visualizer</div>
+                                        <div class="soccer-pitch" id="tactical-pitch">
+                                            <!-- Pitch Markings -->
+                                            <div class="pitch-line center-line"></div>
+                                            <div class="pitch-circle center-circle"></div>
+                                            <div class="pitch-penalty penalty-top"></div>
+                                            <div class="pitch-penalty penalty-bottom"></div>
+                                            <!-- Interactive player positions -->
+                                            <div class="pitch-players-overlay" id="pitch-players-list">
+                                                <!-- Dynamic player nodes -->
+                                            </div>
+                                        </div>
+                                        <div class="pitch-legend">
+                                            <p>Click on any jersey to view details about the player</p>
+                                            <div class="pitch-selected-player-details" id="pitch-selected-player-info" style="display: none;">
+                                                <h4 id="pitch-selected-player-name">--</h4>
+                                                <p id="pitch-selected-player-meta">--</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Schedule & Matches -->
+                                <div class="sub-tab-pane" id="tracker-schedule">
+                                    <div class="schedule-list" id="tracker-schedule-list">
+                                        <!-- Match cards for selected team -->
+                                    </div>
+                                </div>
+
+                                <!-- Team QA -->
+                                <div class="sub-tab-pane" id="tracker-qa">
+                                    <div class="qa-container" id="tracker-qa-list">
+                                        <!-- Q&A Accordeons -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: STADIUMS -->
+            <section class="tab-content" id="tab-stadiums">
+                <div class="stadium-grid" id="stadiums-grid-container">
+                    <!-- Stadium items -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Match Details & Commentary Modal -->
+    <div class="modal-overlay" id="match-modal" style="display: none;">
+        <div class="modal-content">
+            <button class="close-modal-btn" id="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-body" id="match-modal-body">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- WebAssembly glue library from Go -->
+    <script src="wasm_exec.js"></script>
+    <!-- Core Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
