@@ -118,15 +118,16 @@ function setupModalListeners() {
 async function fetchAllData() {
     console.log("Fetching World Cup dataset...");
     
-    // We fetch from the proxy API routes served by our Go server
+    // Fetch directly from live HTTPS API endpoints and local static JSON files
+    // This allows 100% serverless static deployment (e.g. GitHub Pages)
     try {
         const [teamsRes, gamesRes, stadiumsRes, groupsRes, playersRes, commRes] = await Promise.all([
-            fetch('/api/teams').then(r => r.json()),
-            fetch('/api/games').then(r => r.json()),
-            fetch('/api/stadiums').then(r => r.json()),
-            fetch('/api/groups').then(r => r.json()),
-            fetch('/api/players').then(r => r.json()),
-            fetch('/api/commentary').then(r => r.json())
+            fetch('https://worldcup26.ir/get/teams').then(r => r.json()),
+            fetch('https://worldcup26.ir/get/games').then(r => r.json()),
+            fetch('https://worldcup26.ir/get/stadiums').then(r => r.json()),
+            fetch('https://worldcup26.ir/get/groups').then(r => r.json()),
+            fetch('players.json').then(r => r.json()),
+            fetch('commentary.json').then(r => r.json())
         ]);
 
         // Process Teams
