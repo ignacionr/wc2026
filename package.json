@@ -1,0 +1,14 @@
+{
+  "name": "wc2026-wasm-hub",
+  "version": "1.0.0",
+  "description": "FIFA World Cup 2026 Interactive WebAssembly Hub",
+  "main": "server/main.go",
+  "scripts": {
+    "dev": "nix-shell -p go --run \"go run server/main.go\"",
+    "start": "nix-shell -p go --run \"go run server/main.go\"",
+    "build-wasm": "nix-shell -p go --run \"GOOS=js GOARCH=wasm go build -o static/main.wasm wasm/main.go\"",
+    "build-server": "nix-shell -p go --run \"go build -o server_bin server/main.go\""
+  },
+  "author": "Antigravity Pair Programmer",
+  "license": "MIT"
+}

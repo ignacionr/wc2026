@@ -1,0 +1,8 @@
+# Binaries
+server_bin
+
+# OS files
+.DS_Store
+
+# Go workspaces & dependencies
+go.work
